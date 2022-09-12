@@ -5,8 +5,6 @@ export const EachCard = ({ src, handleActiveCard, card, flipped }: any) => {
         handleActiveCard(card)
     }
 
-
-
     return (
         <div >
             <div className={ flipped ? "flipped" : "" }>

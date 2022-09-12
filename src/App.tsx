@@ -41,8 +41,9 @@ function App() {
   const [isDisabled, setIsDisabled] = useState<Boolean>(false)
 
   const [won, setWon] = useState<Boolean>(false)
+  const [winningTime, setWinningTime] = useState<number>(0)
 
-  //function to shuffle card on each new game
+  // function to shuffle card on each new game
   const shuffleDeck = () => {
     const shuffledDeck = [...cardFaces, ...cardFaces]
       .sort(() => Math.random() - 0.5)
@@ -52,13 +53,15 @@ function App() {
     setCurrentTime(0)
     setShuffledDeck(shuffledDeck)
     setTimerActive(true)
+    setWon(false)
   }
 
-  //will run timer as game is active
+  // will run timer as game is active
   useEffect(() => {
     
     if (timerActive) {
     let timeout = setInterval(() => {setCurrentTime((prev) => prev + 1)}, 1000)
+    checkWinner()
     return () => clearInterval(timeout)
   }
   }, [shuffleDeck]) 
@@ -70,7 +73,7 @@ function App() {
     }
   }
 
-  //check if cards match
+  // check if cards match
   useEffect(() => {
     setIsDisabled(true)
     if (activeCardOne && activeCardTwo) {
@@ -84,18 +87,12 @@ function App() {
             } return card
           })
         } )
-        resetChoices()
+        resetChoices()  
       } else {
         setTimeout(() => resetChoices(), 1000)
       }
     }
-
-    if (activeCardOne && activeCardTwo) {
-      shuffledDeck.every(card => card.matched)
-      setWon(true)
-    }
-
-  }, [activeCardOne, activeCardTwo])
+  }, [activeCardOne, activeCardTwo, shuffledDeck, setShuffledDeck])
 
   // resets choices
   const resetChoices = () => {
@@ -111,6 +108,19 @@ function App() {
     }
     return () => setIsDisabled(false)
   }, [isDisabled, setIsDisabled])
+
+  //checks for winner 
+  const checkWinner = () => {
+    const answer = shuffledDeck.every(card => (
+      card.matched
+    ))
+    if (answer) {
+      setWon(answer)
+      setWinningTime(currentTime)
+      setCurrentTime(0)
+      setTimerActive(false)
+    }
+  };
 
   return (
     <div className="App">
@@ -131,10 +141,16 @@ function App() {
             />
           ))
         }
-        <div className="won" >
-          <p>Congratulations! You have won. Play again?</p>
-          <button onClick={shuffleDeck} >New Game</button>
-        </div>
+        {
+          won && (
+            <div className="won" >
+              <p>Congratulations! You have won.</p>
+              Your winning time was: {winningTime} seconds.
+              <p>Play again?</p>
+              <button onClick={shuffleDeck} >New Game</button>
+            </div>
+          )
+        }
       </div>
     </div>
   );
