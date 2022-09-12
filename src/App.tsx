@@ -59,11 +59,31 @@ function App() {
   }, [shuffleDeck]) 
 
 
-// function to determine each active card
-const handleActiveCard = (card: any) => {
-  console.log(card)
-  activeCardOne ? setActiveCardTwo(card) : setActiveCardOne(card)
-}
+  // function to determine each active card
+  const handleActiveCard = (card: any) => {
+    console.log(card)
+    activeCardOne ? setActiveCardTwo(card) : setActiveCardOne(card)
+  }
+
+  //check if cards match
+  useEffect(() => {
+    if (activeCardOne && activeCardTwo) {
+      // @ts-ignore
+      if (activeCardOne.src === activeCardTwo.src) {
+        console.log('these cards match!')
+        resetChoices()
+      } else {
+        console.log('these cards do not match')
+        resetChoices()
+      }
+    }
+  }, [activeCardOne, activeCardTwo])
+
+  // resets choices
+  const resetChoices = () => {
+    setActiveCardOne(null)
+    setActiveCardTwo(null)
+  }
 
   return (
     <div className="App">
