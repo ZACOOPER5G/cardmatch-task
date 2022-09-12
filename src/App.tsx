@@ -101,7 +101,13 @@ function App() {
       <div className="card-grid">
         {
           shuffledDeck.map(card => (
-            <EachCard key={card.id} src={card.src} handleActiveCard={handleActiveCard} card={card} flipped={card.matched} />
+            <EachCard 
+              key={card.id} 
+              src={card.src} 
+              handleActiveCard={handleActiveCard} 
+              card={card} 
+              flipped={card.matched || activeCardOne === card || activeCardTwo === card} 
+            />
           ))
         }
       </div>

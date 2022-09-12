@@ -3,15 +3,36 @@
   margin: 0 auto;
 }
 
+.card-grid img {
+  display: block;
+}
+
 .front {
-  width: 200px
+  width: 100px;
+  opacity: 0;
+  z-index: -1;
+  position: absolute;
+  transform: translateY(-150px);
 }
 
 .back {
-  width: 200px;
+  width: 100px;
+  z-index: 1;
 }
 
 .card-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  margin: 2px;
+}
+
+.flipped .front {
+  opacity: 100;
+  z-index: 1;
+}
+
+.flipped .back {
+  opacity: 0;
+  z-index: -1;
 }
