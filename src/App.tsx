@@ -3,29 +3,30 @@ import './App.css';
 import { EachCard } from './components/EachCard';
 
 const cardFaces = [
-  { "src": "./images/ace_of_clubs.png" },
-  { "src": "./images/ace_of_diamonds.png" },
-  { "src": "./images/ace_of_hearts.png" },
-  { "src": "./images/ace_of_spades.png" },
-  { "src": "./images/black_joker.png" },
-  { "src": "./images/red_joker.png" },
-  { "src": "./images/jack_of_clubs.png" },
-  { "src": "./images/jack_of_diamonds.png" },
-  { "src": "./images/jack_of_hearts.png" },
-  { "src": "./images/jack_of_spades.png" },
-  { "src": "./images/king_of_clubs.png" },
-  { "src": "./images/king_of_diamonds.png" },
-  { "src": "./images/king_of_hearts.png" },
-  { "src": "./images/king_of_spades.png" },
-  { "src": "./images/queen_of_clubs.png" },
-  { "src": "./images/queen_of_diamonds.png" },
-  { "src": "./images/queen_of_hearts.png" },
-  { "src": "./images/queen_of_spades.png" },
+  { src: "./images/ace_of_clubs.png", matched: false },
+  { src: "./images/ace_of_diamonds.png", matched: false  },
+  { src: "./images/ace_of_hearts.png", matched: false  },
+  { src: "./images/ace_of_spades.png", matched: false  },
+  { src: "./images/black_joker.png", matched: false  },
+  { src: "./images/red_joker.png", matched: false  },
+  { src: "./images/jack_of_clubs.png", matched: false  },
+  { src: "./images/jack_of_diamonds.png", matched: false  },
+  { src: "./images/jack_of_hearts.png", matched: false  },
+  { src: "./images/jack_of_spades.png", matched: false  },
+  { src: "./images/king_of_clubs.png", matched: false  },
+  { src: "./images/king_of_diamonds.png", matched: false  },
+  { src: "./images/king_of_hearts.png", matched: false  },
+  { src: "./images/king_of_spades.png", matched: false  },
+  { src: "./images/queen_of_clubs.png", matched: false  },
+  { src: "./images/queen_of_diamonds.png", matched: false  },
+  { src: "./images/queen_of_hearts.png", matched: false  },
+  { src: "./images/queen_of_spades.png", matched: false  },
 ]
 
 type ShuffledDeckType = {
   id: number;
   src: string;
+  matched: boolean;
 }[]
 
 function App() {
@@ -61,7 +62,6 @@ function App() {
 
   // function to determine each active card
   const handleActiveCard = (card: any) => {
-    console.log(card)
     activeCardOne ? setActiveCardTwo(card) : setActiveCardOne(card)
   }
 
@@ -70,10 +70,16 @@ function App() {
     if (activeCardOne && activeCardTwo) {
       // @ts-ignore
       if (activeCardOne.src === activeCardTwo.src) {
-        console.log('these cards match!')
+        setShuffledDeck((prev: any) => {
+          return prev.map((card: any) => {
+            // @ts-ignore
+            if (card.src === activeCardOne.src) {
+              return {...card, matched: true}
+            } return card
+          })
+        } )
         resetChoices()
       } else {
-        console.log('these cards do not match')
         resetChoices()
       }
     }
@@ -95,7 +101,7 @@ function App() {
       <div className="card-grid">
         {
           shuffledDeck.map(card => (
-            <EachCard key={card.id} src={card.src} handleActiveCard={handleActiveCard} card={card} />
+            <EachCard key={card.id} src={card.src} handleActiveCard={handleActiveCard} card={card} flipped={card.matched} />
           ))
         }
       </div>
