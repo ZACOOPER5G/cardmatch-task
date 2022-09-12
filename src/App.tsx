@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { EachCard } from './components/EachCard';
 
@@ -31,21 +31,39 @@ type ShuffledDeckType = {
 function App() {
   const [shuffledDeck, setShuffledDeck] = useState<ShuffledDeckType>([])
 
+  const [currentTime, setCurrentTime] = useState(0)
+  const [timerActive, setTimerActive] = useState<Boolean>(false)
+
+  const [activeCardOne, setActiveCardOne] = useState(null)
+  const [activeCardTwo, setActiveCardTwo] = useState(null)
+
   //function to shuffle card on each new game
   const shuffleDeck = () => {
     const shuffledDeck = [...cardFaces, ...cardFaces]
       .sort(() => Math.random() - 0.5)
       .map((card) => (
-        {...card, id: Math.random()}
+        { ...card, id: Math.random() }
     ))
+    setCurrentTime(0)
     setShuffledDeck(shuffledDeck)
+    setTimerActive(true)
   }
+
+
+  useEffect(() => {
+    
+    if (timerActive) {
+    let timeout = setInterval(() => {setCurrentTime((prev) => prev + 1)}, 1000)
+    return () => clearInterval(timeout)
+  }
+  }, [shuffleDeck]) 
 
   return (
     <div className="App">
       <div>
         <h1>Card Game</h1>
         <button onClick={shuffleDeck} >New Game</button>
+        <p>Timer: {currentTime}</p>
       </div>
       <div className="card-grid">
         {
