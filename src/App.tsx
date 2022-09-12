@@ -38,6 +38,8 @@ function App() {
   const [activeCardOne, setActiveCardOne] = useState(null)
   const [activeCardTwo, setActiveCardTwo] = useState(null)
 
+  const [isDisabled, setIsDisabled] = useState<Boolean>(false)
+
   //function to shuffle card on each new game
   const shuffleDeck = () => {
     const shuffledDeck = [...cardFaces, ...cardFaces]
@@ -59,14 +61,16 @@ function App() {
   }
   }, [shuffleDeck]) 
 
-
   // function to determine each active card
   const handleActiveCard = (card: any) => {
-    activeCardOne ? setActiveCardTwo(card) : setActiveCardOne(card)
+    if (!isDisabled) {
+      activeCardOne ? setActiveCardTwo(card) : setActiveCardOne(card)
+    }
   }
 
   //check if cards match
   useEffect(() => {
+    setIsDisabled(true)
     if (activeCardOne && activeCardTwo) {
       // @ts-ignore
       if (activeCardOne.src === activeCardTwo.src) {
@@ -80,7 +84,7 @@ function App() {
         } )
         resetChoices()
       } else {
-        resetChoices()
+        setTimeout(() => resetChoices(), 1000)
       }
     }
   }, [activeCardOne, activeCardTwo])
@@ -89,7 +93,17 @@ function App() {
   const resetChoices = () => {
     setActiveCardOne(null)
     setActiveCardTwo(null)
+    setIsDisabled(false)
   }
+
+  //disables card selections while cards are active
+  useEffect(() => {
+    if (activeCardOne && activeCardTwo) {
+      setIsDisabled(true)
+    }
+    return () => setIsDisabled(false)
+  }, [isDisabled, setIsDisabled])
+  
 
   return (
     <div className="App">
