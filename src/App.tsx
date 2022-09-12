@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './App.css';
 import { EachCard } from './components/EachCard';
 
@@ -22,13 +23,33 @@ const cardFaces = [
   { "src": "./images/queen_of_spades.png" },
 ]
 
+type ShuffledDeckType = {
+  id: number;
+  src: string;
+}[]
+
 function App() {
+  const [shuffledDeck, setShuffledDeck] = useState<ShuffledDeckType>([])
+
+  //function to shuffle card on each new game
+  const shuffleDeck = () => {
+    const shuffledDeck = [...cardFaces, ...cardFaces]
+      .sort(() => Math.random() - 0.5)
+      .map((card) => (
+        {...card, id: Math.random()}
+    ))
+    setShuffledDeck(shuffledDeck)
+  }
 
   return (
     <div className="App">
+      <div>
+        <h1>Card Game</h1>
+        <button onClick={shuffleDeck} >New Game</button>
+      </div>
       <div className="card-grid">
         {
-          cardFaces.map(card => (
+          shuffledDeck.map(card => (
             <EachCard src={card.src} />
           ))
         }
