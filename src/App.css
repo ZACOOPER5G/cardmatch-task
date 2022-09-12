@@ -1,0 +1,17 @@
+.App {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.front {
+  width: 200px
+}
+
+.back {
+  width: 200px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
