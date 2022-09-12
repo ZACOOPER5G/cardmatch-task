@@ -40,6 +40,8 @@ function App() {
 
   const [isDisabled, setIsDisabled] = useState<Boolean>(false)
 
+  const [won, setWon] = useState<Boolean>(false)
+
   //function to shuffle card on each new game
   const shuffleDeck = () => {
     const shuffledDeck = [...cardFaces, ...cardFaces]
@@ -87,6 +89,12 @@ function App() {
         setTimeout(() => resetChoices(), 1000)
       }
     }
+
+    if (activeCardOne && activeCardTwo) {
+      shuffledDeck.every(card => card.matched)
+      setWon(true)
+    }
+
   }, [activeCardOne, activeCardTwo])
 
   // resets choices
@@ -103,7 +111,6 @@ function App() {
     }
     return () => setIsDisabled(false)
   }, [isDisabled, setIsDisabled])
-  
 
   return (
     <div className="App">
@@ -124,6 +131,10 @@ function App() {
             />
           ))
         }
+        <div className="won" >
+          <p>Congratulations! You have won. Play again?</p>
+          <button onClick={shuffleDeck} >New Game</button>
+        </div>
       </div>
     </div>
   );
