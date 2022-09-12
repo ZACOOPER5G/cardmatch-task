@@ -49,7 +49,7 @@ function App() {
     setTimerActive(true)
   }
 
-
+  //will run timer as game is active
   useEffect(() => {
     
     if (timerActive) {
@@ -57,6 +57,13 @@ function App() {
     return () => clearInterval(timeout)
   }
   }, [shuffleDeck]) 
+
+
+// function to determine each active card
+const handleActiveCard = (card: any) => {
+  console.log(card)
+  activeCardOne ? setActiveCardTwo(card) : setActiveCardOne(card)
+}
 
   return (
     <div className="App">
@@ -68,7 +75,7 @@ function App() {
       <div className="card-grid">
         {
           shuffledDeck.map(card => (
-            <EachCard src={card.src} />
+            <EachCard key={card.id} src={card.src} handleActiveCard={handleActiveCard} card={card} />
           ))
         }
       </div>
