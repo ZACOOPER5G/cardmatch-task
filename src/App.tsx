@@ -7,21 +7,21 @@ const cardFaces = [
   { src: "./images/ace_of_clubs.png", matched: false },
   { src: "./images/ace_of_diamonds.png", matched: false  },
   { src: "./images/ace_of_hearts.png", matched: false  },
-  // { src: "./images/ace_of_spades.png", matched: false  },
-  // { src: "./images/black_joker.png", matched: false  },
-  // { src: "./images/red_joker.png", matched: false  },
-  // { src: "./images/jack_of_clubs.png", matched: false  },
-  // { src: "./images/jack_of_diamonds.png", matched: false  },
-  // { src: "./images/jack_of_hearts.png", matched: false  },
-  // { src: "./images/jack_of_spades.png", matched: false  },
-  // { src: "./images/king_of_clubs.png", matched: false  },
-  // { src: "./images/king_of_diamonds.png", matched: false  },
-  // { src: "./images/king_of_hearts.png", matched: false  },
-  // { src: "./images/king_of_spades.png", matched: false  },
-  // { src: "./images/queen_of_clubs.png", matched: false  },
-  // { src: "./images/queen_of_diamonds.png", matched: false  },
-  // { src: "./images/queen_of_hearts.png", matched: false  },
-  // { src: "./images/queen_of_spades.png", matched: false  },
+  { src: "./images/ace_of_spades.png", matched: false  },
+  { src: "./images/black_joker.png", matched: false  },
+  { src: "./images/red_joker.png", matched: false  },
+  { src: "./images/jack_of_clubs.png", matched: false  },
+  { src: "./images/jack_of_diamonds.png", matched: false  },
+  { src: "./images/jack_of_hearts.png", matched: false  },
+  { src: "./images/jack_of_spades.png", matched: false  },
+  { src: "./images/king_of_clubs.png", matched: false  },
+  { src: "./images/king_of_diamonds.png", matched: false  },
+  { src: "./images/king_of_hearts.png", matched: false  },
+  { src: "./images/king_of_spades.png", matched: false  },
+  { src: "./images/queen_of_clubs.png", matched: false  },
+  { src: "./images/queen_of_diamonds.png", matched: false  },
+  { src: "./images/queen_of_hearts.png", matched: false  },
+  { src: "./images/queen_of_spades.png", matched: false  },
 ]
 
 type ShuffledDeckType = {
@@ -37,6 +37,8 @@ function App() {
 
   const [activeCardOne, setActiveCardOne] = useState(null)
   const [activeCardTwo, setActiveCardTwo] = useState(null)
+  const [previousActiveOne, setPreviousActiveOne] = useState(null)
+  const [previousActiveTwo, setPreviousActiveTwo] = useState(null)
 
   const [isDisabled, setIsDisabled] = useState<Boolean>(false)
 
@@ -66,6 +68,9 @@ function App() {
   useEffect(() => {
     setIsDisabled(true)
     if (activeCardOne && activeCardTwo) {
+      setPreviousActiveOne(activeCardOne)
+      setPreviousActiveTwo(activeCardTwo)
+
       // @ts-ignore
       if (activeCardOne.src === activeCardTwo.src) {
         setShuffledDeck((prev: any) => {
@@ -148,7 +153,7 @@ function App() {
           won && (
             <div className="won" >
               <p>Congratulations! You have won.</p>
-              Your winning time was: {winningTime} seconds.
+              Your winning time was {winningTime} seconds.
               <p>Play again?</p>
               <button onClick={shuffleDeck} >New Game</button>
             </div>

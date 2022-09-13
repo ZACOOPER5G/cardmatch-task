@@ -14,7 +14,7 @@ export const EachCard = ({ src, handleActiveCard, card, flipped }: any) => {
                     onClick={handleClick} 
                     alt="card-back"
                 />
-                <img className="front" src={src} />
+                <img className="front" src={src} alt="front of card" />
             </div>
         </div>
     )
