@@ -1,26 +1,27 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import { EachCard } from './components/EachCard';
+import { Timer } from './components/Timer';
 
 const cardFaces = [
   { src: "./images/ace_of_clubs.png", matched: false },
   { src: "./images/ace_of_diamonds.png", matched: false  },
   { src: "./images/ace_of_hearts.png", matched: false  },
-  { src: "./images/ace_of_spades.png", matched: false  },
-  { src: "./images/black_joker.png", matched: false  },
-  { src: "./images/red_joker.png", matched: false  },
-  { src: "./images/jack_of_clubs.png", matched: false  },
-  { src: "./images/jack_of_diamonds.png", matched: false  },
-  { src: "./images/jack_of_hearts.png", matched: false  },
-  { src: "./images/jack_of_spades.png", matched: false  },
-  { src: "./images/king_of_clubs.png", matched: false  },
-  { src: "./images/king_of_diamonds.png", matched: false  },
-  { src: "./images/king_of_hearts.png", matched: false  },
-  { src: "./images/king_of_spades.png", matched: false  },
-  { src: "./images/queen_of_clubs.png", matched: false  },
-  { src: "./images/queen_of_diamonds.png", matched: false  },
-  { src: "./images/queen_of_hearts.png", matched: false  },
-  { src: "./images/queen_of_spades.png", matched: false  },
+  // { src: "./images/ace_of_spades.png", matched: false  },
+  // { src: "./images/black_joker.png", matched: false  },
+  // { src: "./images/red_joker.png", matched: false  },
+  // { src: "./images/jack_of_clubs.png", matched: false  },
+  // { src: "./images/jack_of_diamonds.png", matched: false  },
+  // { src: "./images/jack_of_hearts.png", matched: false  },
+  // { src: "./images/jack_of_spades.png", matched: false  },
+  // { src: "./images/king_of_clubs.png", matched: false  },
+  // { src: "./images/king_of_diamonds.png", matched: false  },
+  // { src: "./images/king_of_hearts.png", matched: false  },
+  // { src: "./images/king_of_spades.png", matched: false  },
+  // { src: "./images/queen_of_clubs.png", matched: false  },
+  // { src: "./images/queen_of_diamonds.png", matched: false  },
+  // { src: "./images/queen_of_hearts.png", matched: false  },
+  // { src: "./images/queen_of_spades.png", matched: false  },
 ]
 
 type ShuffledDeckType = {
@@ -32,7 +33,6 @@ type ShuffledDeckType = {
 function App() {
   const [shuffledDeck, setShuffledDeck] = useState<ShuffledDeckType>([])
 
-  const [currentTime, setCurrentTime] = useState(0)
   const [timerActive, setTimerActive] = useState<Boolean>(false)
 
   const [activeCardOne, setActiveCardOne] = useState(null)
@@ -50,21 +50,10 @@ function App() {
       .map((card) => (
         { ...card, id: Math.random() }
     ))
-    setCurrentTime(0)
     setShuffledDeck(shuffledDeck)
     setTimerActive(true)
     setWon(false)
   }
-
-  // will run timer as game is active
-  useEffect(() => {
-    
-    if (timerActive) {
-    let timeout = setInterval(() => {setCurrentTime((prev) => prev + 1)}, 1000)
-    checkWinner()
-    return () => clearInterval(timeout)
-  }
-  }, [shuffleDeck]) 
 
   // function to determine each active card
   const handleActiveCard = (card: any) => {
@@ -109,25 +98,39 @@ function App() {
     return () => setIsDisabled(false)
   }, [isDisabled, setIsDisabled])
 
-  //checks for winner 
+  // checks for winner 
+  useEffect(() => {
+    setWon(false)
+    let timeout = setInterval(() => {checkWinner()}, 1000)
+        return () => clearInterval(timeout)
+  }, [isDisabled, setIsDisabled])  
+
   const checkWinner = () => {
-    const answer = shuffledDeck.every(card => (
-      card.matched
-    ))
-    if (answer) {
-      setWon(answer)
-      setWinningTime(currentTime)
-      setCurrentTime(0)
-      setTimerActive(false)
+    if (shuffledDeck.length > 0 ) {
+      const answer = shuffledDeck.every(card => (
+        card.matched === true
+      ))
+      
+      if (answer) {
+        setWon(answer)
+      }
     }
   };
+
+  // checks for winning time
+  const checkWinningTime = (time: any) => {
+    won && setWinningTime(time)
+    won && setTimerActive(false)
+  }
 
   return (
     <div className="App">
       <div>
         <h1>Card Game</h1>
         <button onClick={shuffleDeck} >New Game</button>
-        <p>Timer: {currentTime}</p>
+        <p>Timer: {
+            timerActive ? <Timer checkWinningTime={checkWinningTime} /> : "0"
+          }</p>
       </div>
       <div className="card-grid">
         {
